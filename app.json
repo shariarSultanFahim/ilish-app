@@ -1,0 +1,40 @@
+{
+  "expo": {
+    "name": "Ilish Checker",
+    "slug": "ilish-checker",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "ilishchecker",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": false,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.ilishchecker"
+    },
+    "android": {
+      "package": "com.anonymous.ilishchecker",
+      "adaptiveIcon": {
+        "backgroundColor": "#0F172A",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app needs access to your photos to classify fish images.",
+          "cameraPermission": "The app needs access to your camera to take fish photos for classification."
+        }
+      ]
+    ]
+  }
+}
