@@ -35,7 +35,8 @@
           "photosPermission": "The app needs access to your photos to classify fish images.",
           "cameraPermission": "The app needs access to your camera to take fish photos for classification."
         }
-      ]
+      ],
+      "expo-asset"
     ],
     "extra": {
       "router": {

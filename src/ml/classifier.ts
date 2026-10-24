@@ -1,4 +1,5 @@
 import { loadTensorflowModel, TfliteModel, Tensor } from 'react-native-fast-tflite';
+import { Asset } from 'expo-asset';
 import { EXPECTED_LABELS, EXPECTED_CLASSES_COUNT, MODEL_IMAGE_SIZE, EXPECTED_CHANNELS } from '../config';
 import { decide, DecisionResult } from './decide';
 import { preprocessImage } from './preprocess';
@@ -89,12 +90,19 @@ export async function initClassifier(): Promise<ModelMetadata> {
 
   const start = Date.now();
   try {
-    // Model is bundled via Metro assetExts: require('../../assets/model/ilish_classifier.tflite')
+    // In standalone release APKs, raw require(..) resolves to a resource identifier (assets_model_ilish_classifier)
+    // without a URL protocol, causing java.net.MalformedURLException.
+    // We resolve the bundled asset using Expo's Asset loader to ensure a valid file:// localUri.
+    const assetModule = require('../../assets/model/ilish_classifier.tflite');
+    const [asset] = await Asset.loadAsync(assetModule);
+    const modelSource = asset.localUri
+      ? { url: asset.localUri }
+      : asset.uri.startsWith('http') || asset.uri.startsWith('file:')
+      ? { url: asset.uri }
+      : assetModule;
+
     // Use default CPU delegate (empty array)
-    const model = await loadTensorflowModel(
-      require('../../assets/model/ilish_classifier.tflite'),
-      []
-    );
+    const model = await loadTensorflowModel(modelSource, []);
 
     const loadTimeMs = Date.now() - start;
     const inputs = model.inputs;
