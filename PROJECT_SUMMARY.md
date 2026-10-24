@@ -194,6 +194,10 @@ npx eas build --platform android --profile production
    - *Problem*: `FileSystem.documentDirectory` and legacy methods were undefined in SDK 58 types.
    - *Resolution*: Refactored `src/storage/history.ts` to use `Paths.document`, `Directory`, and `File` from `expo-file-system`.
 
+6. **Release APK `java.net.MalformedURLException: no protocol: assets_model_ilish_classifier`**:
+   - *Problem*: In standalone Android release APK builds, Metro bundles assets as raw resource names (e.g., `assets_model_ilish_classifier`) instead of URLs. In `react-native-fast-tflite`, the Android Kotlin `HybridAssetLoader` directly passes the path to `java.net.URL(path).readBytes()`, throwing `MalformedURLException` because there is no protocol (`file://` or `http://`).
+   - *Resolution*: Integrated `expo-asset` in `src/ml/classifier.ts`. At runtime, `Asset.loadAsync(require('../../assets/model/ilish_classifier.tflite'))` extracts the bundled asset to a valid local file path (`file://.../assets_model_ilish_classifier.tflite`), ensuring `HybridAssetLoader` receives a valid URL protocol.
+
 ---
 
 ## (7) Results of Verification Commands
